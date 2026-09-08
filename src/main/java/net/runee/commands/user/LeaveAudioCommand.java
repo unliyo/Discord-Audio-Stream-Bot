@@ -5,7 +5,6 @@ import net.dv8tion.jda.api.entities.channel.middleman.AudioChannel;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.runee.DiscordAudioStreamBot;
 import net.runee.errors.CommandException;
 import net.runee.misc.Utils;
 import net.runee.misc.discord.Command;
@@ -27,7 +26,7 @@ public class LeaveAudioCommand extends Command {
             reply(ctx, "Not connected - join an audio channel first!", Utils.colorRed);
             return;
         }
-        DiscordAudioStreamBot.getInstance().leaveAudio(guild);
+        getBot(ctx).leaveAudio(guild);
         reply(ctx, "Left audio channel `" + channel.getName() + "`.", Utils.colorGreen);
     }
 }

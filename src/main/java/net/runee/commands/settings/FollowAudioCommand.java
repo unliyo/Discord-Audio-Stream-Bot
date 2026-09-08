@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.runee.errors.CommandException;
 import net.runee.misc.Utils;
 import net.runee.misc.discord.Command;
-import net.runee.model.Config;
+import net.runee.model.BotConfig;
 import net.runee.model.GuildConfig;
 import java.util.Locale;
 
@@ -47,7 +47,7 @@ public class FollowAudioCommand extends Command {
     }
 
     private void setFollowVoice(SlashCommandInteractionEvent ctx, Guild guild, Member target) {
-        final Config config = getConfig();
+        final BotConfig config = getBotConfig(ctx);
         GuildConfig guildConfig = config.getGuildConfig(guild);
         guildConfig.followedUserId = target != null ? target.getId() : null;
         saveConfig();
@@ -59,7 +59,7 @@ public class FollowAudioCommand extends Command {
     }
 
     private void showFollowVoice(SlashCommandInteractionEvent ctx, Guild guild) {
-        final Config config = getConfig();
+        final BotConfig config = getBotConfig(ctx);
         GuildConfig guildConfig = config.getGuildConfig(guild);
         if (guildConfig.followedUserId != null) {
             reply(ctx, "Current follow target: " + formatMember(ctx.getJDA(), guildConfig.guildId, guildConfig.followedUserId) + ".", Utils.colorGreen);

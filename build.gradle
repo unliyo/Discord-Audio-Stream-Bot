@@ -19,18 +19,20 @@ application {
 }
 
 java {
-    sourceCompatibility = JavaVersion.VERSION_17 // jda 6 bundles java 17 bytecode
-    targetCompatibility = JavaVersion.VERSION_17 // align runtime expectations
+    sourceCompatibility = JavaVersion.VERSION_25 // JDAVE requires Java 25 (FFM API)
+    targetCompatibility = JavaVersion.VERSION_25 // align runtime expectations
 }
 
 repositories {
     gradlePluginPortal()
     mavenCentral()
-    maven { url 'https://m2.dv8tion.net/releases' }
+    maven { url = 'https://m2.dv8tion.net/releases' }
 }
 
 dependencies {
-	implementation 'net.dv8tion:JDA:6.1.0' // discord api
+	implementation 'net.dv8tion:JDA:6.3.1' // discord api
+    implementation 'club.minnced:jdave-api:0.1.7' // DAVE session implementation
+    implementation 'club.minnced:jdave-native-win-x86-64:0.1.7' // DAVE native bindings (Windows x64)
 //    implementation 'com.sedmelluq:lavaplayer:1.3.42' // audio player library for discord
     implementation 'com.jgoodies:jgoodies-forms:1.9.0' // ui framework
     implementation 'com.jgoodies:jgoodies-common:1.8.1' // ui framework
@@ -89,6 +91,8 @@ run {
     if (Integer.valueOf(JavaVersion.current().getMajorVersion()) >= 9 && Os.isFamily(Os.FAMILY_WINDOWS)) {
         jvmArgs += '--add-exports=java.desktop/com.sun.java.swing.plaf.windows=ALL-UNNAMED'
     }
+    // required for JDAVE restricted native access (FFM)
+    jvmArgs += '--enable-native-access=ALL-UNNAMED'
 }
 
 // same as for the normal run configuration...
@@ -117,4 +121,6 @@ runShadow {
     if (Integer.valueOf(JavaVersion.current().getMajorVersion()) >= 9 && Os.isFamily(Os.FAMILY_WINDOWS)) {
         jvmArgs += '--add-exports=java.desktop/com.sun.java.swing.plaf.windows=ALL-UNNAMED'
     }
+    // required for JDAVE restricted native access (FFM)
+    jvmArgs += '--enable-native-access=ALL-UNNAMED'
 }

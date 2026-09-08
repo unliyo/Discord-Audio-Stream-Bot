@@ -2,7 +2,6 @@ package net.runee.commands.bot;
 
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.runee.DiscordAudioStreamBot;
 import net.runee.errors.CommandException;
 import net.runee.misc.Utils;
 import net.runee.misc.discord.Command;
@@ -18,7 +17,7 @@ public class LeaveAudioAllCommand extends Command {
         ensureOwnerPermission(ctx);
 
         // execute
-        DiscordAudioStreamBot.getInstance().leaveVoiceAll();
+        getBot(ctx).leaveVoiceAll();
         reply(ctx, "Left all audio channels.", Utils.colorGreen);
     }
 }
