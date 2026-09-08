@@ -9,7 +9,6 @@ import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEve
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.OptionType;
 import net.dv8tion.jda.api.interactions.commands.build.Commands;
-import net.runee.DiscordAudioStreamBot;
 import net.runee.errors.CommandException;
 import net.runee.misc.Utils;
 import net.runee.misc.discord.Command;
@@ -63,7 +62,7 @@ public class JoinAudioCommand extends Command {
             return;
         }
 
-        DiscordAudioStreamBot.getInstance().joinAudio(channel);
+        getBot(ctx).joinAudio(channel);
         reply(ctx, "Joined audio channel `" + channel.getName() + "`.", Utils.colorGreen);
     }
 }

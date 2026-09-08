@@ -6,8 +6,10 @@ import net.dv8tion.jda.api.entities.*;
 import net.dv8tion.jda.api.events.interaction.command.SlashCommandInteractionEvent;
 import net.dv8tion.jda.api.interactions.commands.OptionMapping;
 import net.dv8tion.jda.api.interactions.commands.build.SlashCommandData;
+import net.runee.BotManager;
 import net.runee.DiscordAudioStreamBot;
 import net.runee.errors.*;
+import net.runee.model.BotConfig;
 import net.runee.model.Config;
 
 import java.awt.*;
@@ -124,13 +126,28 @@ public abstract class Command {
         }
     }
 
+    /** global (audio) configuration shared by all bots */
     protected Config getConfig() {
-        return DiscordAudioStreamBot.getConfig();
+        return BotManager.getConfig();
+    }
+
+    /** the bot instance that received this interaction */
+    protected DiscordAudioStreamBot getBot(SlashCommandInteractionEvent ctx) {
+        DiscordAudioStreamBot bot = BotManager.getBot(ctx.getJDA());
+        if (bot == null) {
+            throw new IllegalStateException("No bot instance registered for this JDA");
+        }
+        return bot;
+    }
+
+    /** configuration of the bot instance that received this interaction */
+    protected BotConfig getBotConfig(SlashCommandInteractionEvent ctx) {
+        return getBot(ctx).getBotConfig();
     }
 
     protected void saveConfig() {
         try {
-            DiscordAudioStreamBot.saveConfig();
+            BotManager.saveConfig();
         } catch (IOException ex) {
             throw new RuntimeException(ex);
         }

@@ -23,6 +23,7 @@ public class GuildConfig {
     public GuildConfig(GuildConfig copy) {
         this.guildId = copy.guildId;
         this.autoJoinAudioChannelId = copy.autoJoinAudioChannelId;
+        this.followedUserId = copy.followedUserId;
         if(copy.commandChannelIds != null) {
             this.commandChannelIds = new HashSet<>(copy.commandChannelIds);
         }

@@ -9,7 +9,7 @@ import net.dv8tion.jda.api.interactions.commands.build.Commands;
 import net.runee.errors.CommandException;
 import net.runee.misc.Utils;
 import net.runee.misc.discord.Command;
-import net.runee.model.Config;
+import net.runee.model.BotConfig;
 import net.runee.model.GuildConfig;
 import java.util.Locale;
 import java.util.stream.Collectors;
@@ -59,7 +59,7 @@ public class BindCommand extends Command {
         }
 
         // execute
-        final Config config = getConfig();
+        final BotConfig config = getBotConfig(ctx);
         GuildConfig guildConfig = config.getGuildConfig(guild);
         switch (op) {
             case "add":

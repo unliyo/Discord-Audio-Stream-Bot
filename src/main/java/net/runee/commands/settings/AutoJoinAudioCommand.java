@@ -48,7 +48,7 @@ public class AutoJoinAudioCommand extends Command {
         }
 
         // execute
-        GuildConfig guildConfig = getConfig().getGuildConfig(ctx.getGuild());
+        GuildConfig guildConfig = getBotConfig(ctx).getGuildConfig(ctx.getGuild());
 
         switch (op) {
             case "set":

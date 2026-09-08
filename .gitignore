@@ -6,3 +6,11 @@ app.log
 config.json
 gradlew
 gradlew.bat
+# gradle distribution unpacked into the project dir (not part of the project)
+/bin/
+/lib/
+/init.d/
+/gradle.bat
+/LICENSE
+/NOTICE
+/README

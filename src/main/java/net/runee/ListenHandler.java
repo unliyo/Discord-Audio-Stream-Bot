@@ -25,7 +25,7 @@ public class ListenHandler implements AudioReceiveHandler, Closeable {
 
     public static final int MAX_LAG = 200;
     public static final int PLAYBACK_FLAGS = 0; //BASS_DEVICE.BASS_DEVICE_3D;
-    private static final List<ListenHandler> activeHandlers = new ArrayList<>();
+    private static final List<ListenHandler> activeHandlers = new java.util.concurrent.CopyOnWriteArrayList<>();
 
     private final Object memoryQueueLock = new Object();
     private int playbackDevice;
@@ -80,7 +80,9 @@ public class ListenHandler implements AudioReceiveHandler, Closeable {
     public void handleCombinedAudio(@Nonnull CombinedAudio combinedAudio) {
         byte[] data = combinedAudio.getAudioData(1);
         synchronized (memoryQueueLock) {
-            memoryQueue.enqueue(data, 0, data.length);
+            if (memoryQueue != null) {
+                memoryQueue.enqueue(data, 0, data.length);
+            }
         }
     }
 
@@ -143,16 +145,21 @@ public class ListenHandler implements AudioReceiveHandler, Closeable {
 
     @Override
     public void close() throws IOException {
-        if (playbackStream != null) {
-            Bass.BASS_ChannelStop(playbackStream.asInt());
-        }
-        if (playbackDevice >= 0) {
-            Bass.BASS_SetDevice(playbackDevice);
-            Bass.BASS_Free();
-        }
-        memoryQueue = null;
-        //buffer = null;
+        closed = true;
+        activeHandlers.remove(this);
+        HSTREAM stream = playbackStream;
         playbackStream = null;
+        synchronized (memoryQueueLock) {
+            memoryQueue = null;
+        }
+        // several bots may share one playback stream: only the last one tears it down
+        if (stream != null && getActiveHandlers(stream).isEmpty()) {
+            Bass.BASS_ChannelStop(stream.asInt());
+            if (playbackDevice >= 0) {
+                Bass.BASS_SetDevice(playbackDevice);
+                Bass.BASS_Free();
+            }
+        }
         playbackDevice = -1;
         Utils.checkBassError();
     }
